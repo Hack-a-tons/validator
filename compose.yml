@@ -1,0 +1,11 @@
+services:
+  validator:
+    build: .
+    container_name: validator-service
+    restart: always
+    ports:
+      - "127.0.0.1:${PORT}:${PORT}"
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
