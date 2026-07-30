@@ -57,6 +57,11 @@ fi
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 remote="${DEPLOY_USER}@${DEPLOY_HOST}"
+origin_url="$(git remote get-url origin)"
+deploy_parent="$(dirname "$DEPLOY_DIR")"
+
+# Bootstrap a new production checkout when this is the first deployment.
+ssh "$remote" "if [[ ! -e '$DEPLOY_DIR' ]]; then mkdir -p '$deploy_parent' && git clone --branch '$branch' '$origin_url' '$DEPLOY_DIR'; fi; test -d '$DEPLOY_DIR/.git'"
 remote_branch="$(ssh "$remote" "cd '$DEPLOY_DIR' && git rev-parse --abbrev-ref HEAD")"
 if [[ "$remote_branch" != "$branch" ]]; then
   printf 'Error: remote branch is %s; local branch is %s. Switch the remote branch first.\n' "$remote_branch" "$branch" >&2
