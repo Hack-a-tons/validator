@@ -45,7 +45,6 @@ Respond with JSON only: {{"verdict":"DECLINE or APPROVE","reasoning":"brief expl
         response = client.responses.create(
             model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
             input=prompt,
-            temperature=0,
         )
         payload = _ArbitrationPayload.model_validate(json.loads(response.output_text))
     except Exception as exc:
