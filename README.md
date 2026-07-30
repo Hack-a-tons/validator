@@ -1,4 +1,4 @@
-# 🛡️ Validator: Visual Jailbreak Detection for AI Video
+# 🛡️ PRE-GEN detect: Visual Jailbreak Detection for AI Video
 
 *Built for the [Hack the Video Agent Context Graph](https://luma.com/hack-video-agent-context-graph-jul30-2026) Hackathon (July 30, 2026).*
 
@@ -8,7 +8,7 @@ Current AI video generators have a massive loophole. If a user prompts for a pro
 This exposes platform operators to severe IP, copyright, and licensing liabilities, as the generated content still visually violates the protected likeness.
 
 ## 💡 The Solution
-**Validator** is an independent service that detects and blocks these visual jailbreaks. Instead of relying solely on the user's initial text prompt, Validator analyzes the *actual generated visual output* and compares it against protected subject registries before it can be distributed.
+**PRE-GEN detect** is an independent service that detects and blocks these visual jailbreaks. Instead of relying solely on the user's initial text prompt, PRE-GEN detect analyzes the *actual generated visual output* and compares it against protected subject registries before it can be distributed.
 
 ### The Ecosystem
 This demo integrates with the following platforms to simulate a real-world pipeline:

@@ -11,8 +11,8 @@ from app.twelvelabs_client import TwelveLabsError, describe_primary_subject
 
 load_dotenv()
 
-st.set_page_config(page_title="Validator", page_icon="🛡️", layout="centered")
-st.title("🛡️ Validator — Visual Jailbreak Detection")
+st.set_page_config(page_title="PRE-GEN detect", page_icon="🛡️", layout="centered")
+st.title("🛡️ PRE-GEN detect — Visual Jailbreak Detection")
 st.write("Compare a generated video's visible subject against a protected description before distribution.")
 
 with st.form("validation-form"):

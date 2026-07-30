@@ -5,7 +5,7 @@ from __future__ import annotations
 import ipaddress
 import re
 import socket
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -74,6 +74,30 @@ def _fetch_public_page(source_url: str, timeout: float) -> requests.Response:
     raise VideoExtractionError("The video page redirected too many times.")
 
 
+def _extract_buddian_mp4_url(source_url: str, timeout: float) -> str | None:
+    """Resolve Buddian pages whose video source is populated client-side."""
+    parsed = urlparse(source_url)
+    if parsed.hostname not in {"buddian.com", "www.buddian.com"} or parsed.path != "/app/video":
+        return None
+    video_id = parse_qs(parsed.query).get("id", [""])[0]
+    if not video_id.isdecimal():
+        return None
+
+    details_url = f"https://api.buddian.com/api/v1/videos/{video_id}/details"
+    try:
+        details = _fetch_public_page(details_url, timeout).json()
+    except (VideoExtractionError, ValueError) as exc:
+        raise VideoExtractionError(f"Could not retrieve Buddian video details: {exc}") from exc
+
+    result_url = details.get("result_url") if isinstance(details, dict) else None
+    if not isinstance(result_url, str):
+        raise VideoExtractionError("Buddian did not return a direct video URL for this generation.")
+    resolved = _normalise_candidate(result_url, "https://buddian.com/")
+    if _is_mp4_url(resolved) and _is_public_http_url(resolved):
+        return resolved
+    raise VideoExtractionError("Buddian returned an invalid or non-public video URL.")
+
+
 def extract_mp4_url(video_url: str, *, timeout: float = 15) -> str:
     """Return a direct MP4 URL from a direct URL or a Buddian video page.
 
@@ -87,6 +111,9 @@ def extract_mp4_url(video_url: str, *, timeout: float = 15) -> str:
         raise VideoExtractionError("The video URL must be a publicly reachable HTTP(S) URL.")
     if _is_mp4_url(source_url):
         return source_url
+
+    if buddian_mp4_url := _extract_buddian_mp4_url(source_url, timeout):
+        return buddian_mp4_url
 
     response = _fetch_public_page(source_url, timeout)
 
