@@ -14,6 +14,7 @@ This exposes platform operators to severe IP, copyright, and licensing liabiliti
 This demo integrates with the following platforms to simulate a real-world pipeline:
 *   **[Prampta.com](https://prampta.com):** The source of truth for license issues, IP protection, and subject validation rules.
 *   **[Buddian.com](https://buddian.com):** The AI video generation platform where the synthesized media is created.
+*   **[validator.prampta.com](https://validator.prampta.com):** Standalone demo. Enter video URL and character to search for.
 
 ## ⚙️ How It Works (The Demo Flow)
 The standalone UI accepts two simple inputs:
